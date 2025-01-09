@@ -26,9 +26,11 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public void deposit(Account account, double amount) {
+        // Validate the deposit amount
         if (amount <= 0) {
             throw new IllegalArgumentException("Deposit amount must be positive.");
         }
+        // Update the account balance
         account.setBalance(account.getBalance() + amount);
     }
 }
