@@ -29,4 +29,7 @@ public interface AccountService {
      * @throws IllegalArgumentException if the deposit amount is zero or negative.
      */
     void deposit(Account account, double amount);
+
+    void withdraw(Account account, double amount);
+
 }
