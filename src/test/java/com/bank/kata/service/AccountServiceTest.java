@@ -1,6 +1,9 @@
 package com.bank.kata.service;
 
+import com.bank.kata.model.Account;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test suite for the AccountService interface and its implementation.
@@ -9,7 +12,7 @@ import org.junit.jupiter.api.Test;
  * ensuring that balances are updated accurately. It follows the Arrange-Act-Assert
  * (AAA) pattern for structuring test cases.
  *
- * @author Houssem Eddine Yahia
+ * @author [Houssem Eddine Yahia]
  * @version 1.0
  */
 public class AccountServiceTest {
