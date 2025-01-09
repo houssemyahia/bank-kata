@@ -87,4 +87,26 @@ public class AccountServiceTest {
         // Then: An IllegalArgumentException is thrown with the expected message
         assertEquals("Deposit amount must be positive.", exception.getMessage());
     }
+
+    /**
+     * Tests the behavior of the withdraw method when a valid amount is withdrawn.
+     *
+     * <p>Given: An account with an initial balance of 200.0.
+     * <p>When: A withdrawal of 50.0 is made.
+     * <p>Then: The account balance should decrease to 150.0.
+     */
+    @Test
+    void shouldDecreaseBalanceWhenWithdrawalIsMade() {
+        // Arrange: Create an account with an initial balance
+        Account account = new Account();
+        account.setBalance(200.0); // Directly set the initial balance
+
+        AccountService accountService = new AccountServiceImpl();
+
+        // Act: Withdraw an amount
+        accountService.withdraw(account, 50.0);
+
+        // Assert: Verify the balance is updated correctly
+        assertEquals(150.0, account.getBalance());
+    }
 }
