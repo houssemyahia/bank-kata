@@ -48,6 +48,14 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public void withdraw(Account account, double amount) {
+        // Validate the withdrawal amount
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Withdrawal amount must be positive.");
+        }
+        // Ensure sufficient funds are available
+        if (amount > account.getBalance()) {
+            throw new IllegalArgumentException("Insufficient funds.");
+        }
         // Deduct the withdrawal amount from the account balance
         account.setBalance(account.getBalance() - amount);
     }

@@ -67,7 +67,7 @@ public class AccountServiceTest {
     /**
      * Tests the behavior of the deposit method when a zero amount is provided.
      *
-     * <p>
+     * <p>Scenario:
      * - Given: An instance of AccountService and an empty Account.
      * - When: A zero deposit (0.0) is attempted.
      * - Then: An IllegalArgumentException is thrown with the message:
@@ -91,9 +91,10 @@ public class AccountServiceTest {
     /**
      * Tests the behavior of the withdraw method when a valid amount is withdrawn.
      *
-     * <p>Given: An account with an initial balance of 200.0.
-     * <p>When: A withdrawal of 50.0 is made.
-     * <p>Then: The account balance should decrease to 150.0.
+     * <p>Scenario:
+     * - Given: An account with an initial balance of 200.0.
+     * - When: A withdrawal of 50.0 is made.
+     * - Then: The account balance should decrease to 150.0.
      */
     @Test
     void shouldDecreaseBalanceWhenWithdrawalIsMade() {
@@ -108,5 +109,56 @@ public class AccountServiceTest {
 
         // Assert: Verify the balance is updated correctly
         assertEquals(150.0, account.getBalance());
+    }
+
+    /**
+     * Tests the behavior of the withdraw method when the withdrawal amount
+     * exceeds the current account balance.
+     *
+     * <p>Scenario:
+     * - Given: An account with a balance of 100.0.
+     * - When: A withdrawal of 200.0 is attempted.
+     * - Then: An IllegalArgumentException is thrown with the message:
+     * "Insufficient funds."
+     */
+    @Test
+    void shouldThrowExceptionWhenWithdrawalExceedsBalance() {
+        // Arrange: Create an AccountService and an account with a balance of 100.0
+        AccountService accountService = new AccountServiceImpl();
+        Account account = new Account();
+        accountService.deposit(account, 100.0); // Deposit initial balance
+
+        // Act & Assert: Attempt to withdraw more than the balance and verify the exception
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            accountService.withdraw(account, 200.0); // Withdrawal exceeds balance
+        });
+
+        // Assert: Verify the exception message
+        assertEquals("Insufficient funds.", exception.getMessage());
+    }
+
+    /**
+     * Tests the behavior of the withdraw method when a negative withdrawal amount
+     * is provided.
+     *
+     * <p>Scenario:
+     * - Given: An account with a balance (default zero).
+     * - When: A withdrawal of -50.0 is attempted.
+     * - Then: An IllegalArgumentException is thrown with the message:
+     * "Withdrawal amount must be positive."
+     */
+    @Test
+    void shouldThrowExceptionWhenWithdrawalIsNegative() {
+        // Arrange: Create an AccountService and an account with default balance
+        AccountService accountService = new AccountServiceImpl();
+        Account account = new Account();
+
+        // Act & Assert: Attempt to withdraw a negative amount and verify the exception
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            accountService.withdraw(account, -50.0); // Negative withdrawal
+        });
+
+        // Assert: Verify the exception message
+        assertEquals("Withdrawal amount must be positive.", exception.getMessage());
     }
 }
