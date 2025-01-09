@@ -33,4 +33,30 @@ public class AccountServiceImpl implements AccountService {
         // Update the account balance
         account.setBalance(account.getBalance() + amount);
     }
+
+    /**
+     * Withdraws a specified amount from the given account.
+     *
+     * <p>Business Rule:
+     * - The withdrawal amount is deducted from the account's current balance.
+     * - This method assumes that the withdrawal amount is valid and that sufficient funds
+     *   are available in the account. Any validations related to negative amounts or
+     *   insufficient funds should be handled before calling this method.
+     *
+     * @param account the account from which the withdrawal is made.
+     * @param amount the amount to withdraw.
+     */
+    @Override
+    public void withdraw(Account account, double amount) {
+        // Validate the withdrawal amount
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Withdrawal amount must be positive.");
+        }
+        // Ensure sufficient funds are available
+        if (amount > account.getBalance()) {
+            throw new IllegalArgumentException("Insufficient funds.");
+        }
+        // Deduct the withdrawal amount from the account balance
+        account.setBalance(account.getBalance() - amount);
+    }
 }
