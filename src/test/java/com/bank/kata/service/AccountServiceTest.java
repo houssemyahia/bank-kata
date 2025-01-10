@@ -151,7 +151,7 @@ public class AccountServiceTest {
     void shouldThrowExceptionWhenWithdrawalExceedsBalance() {
         // Arrange: Create an account with a balance of 100.0
         Account account = new Account();
-        accountService.deposit(account, 100.0); // Deposit initial balance
+        account.setBalance(100.0); // Deposit initial balance
 
         // Act & Assert: Attempt to withdraw more than the balance and verify the exception
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {

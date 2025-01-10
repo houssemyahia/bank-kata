@@ -75,7 +75,7 @@ public class TransactionServiceTest {
         double depositAmount = 100.0;
 
         // Act
-        transactionService.recordTransaction(account, TransactionType.DEPOSIT, depositAmount);
+        account = transactionService.recordTransaction(account, TransactionType.DEPOSIT, depositAmount);
 
         // Assert
         List<Transaction> transactions = account.getTransactions();
@@ -104,7 +104,7 @@ public class TransactionServiceTest {
         double withdrawalAmount = 50.0;
 
         // Act
-        transactionService.recordTransaction(account, TransactionType.WITHDRAWAL, withdrawalAmount);
+        account = transactionService.recordTransaction(account, TransactionType.WITHDRAWAL, withdrawalAmount);
 
         // Assert
         List<Transaction> transactions = account.getTransactions();

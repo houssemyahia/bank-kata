@@ -82,6 +82,6 @@ public class AccountServiceImpl implements AccountService {
         account.setBalance(account.getBalance() - amount);
 
         // Record the transaction
-        transactionService.recordTransaction(account, TransactionType.DEPOSIT, amount);
+        transactionService.recordTransaction(account, TransactionType.WITHDRAWAL, amount);
     }
 }
