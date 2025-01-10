@@ -1,11 +1,11 @@
 package com.bank.kata.service;
 
+import com.bank.kata.model.Account;
 import com.bank.kata.model.Transaction;
 import com.bank.kata.model.TransactionType;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
@@ -15,70 +15,79 @@ import static org.mockito.Mockito.spy;
  * Test suite for TransactionFormatterServiceImpl.
  *
  * <p>This suite verifies that the formatter generates the correct plain-text
- * representation of a list of transactions, including headers and data alignment.
+ * representation of an account's transactions, including headers, account details,
+ * and data alignment.
  */
 public class TransactionFormatterServiceTest {
 
     /**
-     * Verifies that the formatter correctly formats a list of transactions into
+     * Verifies that the formatter correctly formats an account's transactions into
      * a plain-text table.
      *
      * <p>Scenario:
-     * - Given: A list of transactions with deposits and withdrawals.
+     * - Given: An account with a list of transactions (deposits and withdrawals).
      * - When: The format method is called.
      * - Then: The returned string matches the expected output.
      */
     @Test
-    void shouldFormatTransactionsCorrectly() {
-        // Stub the date for each transaction to ensure predictable output
+    void shouldFormatAccountTransactionsCorrectly() {
+        // Arrange: Create an account and stub transactions with predictable dates
+        Account account = new Account("John Doe", "USD");
         Transaction transaction1 = spy(new Transaction(TransactionType.DEPOSIT, 100.0, 100.0));
         Transaction transaction2 = spy(new Transaction(TransactionType.WITHDRAWAL, 50.0, 50.0));
-
         doReturn(LocalDateTime.of(2025, 1, 9, 10, 30)).when(transaction1).getDate();
         doReturn(LocalDateTime.of(2025, 1, 9, 10, 35)).when(transaction2).getDate();
 
-        // Arrange: Prepare the formatter and a list of stubbed transactions
-        TransactionFormatterService formatter = new TransactionFormatterServiceImpl();
-        List<Transaction> transactions = List.of(transaction1, transaction2);
+        account.getTransactions().add(transaction1);
+        account.getTransactions().add(transaction2);
 
-        // Define the expected output with the specific dates and transaction details
+        TransactionFormatterService formatter = new TransactionFormatterServiceImpl();
+
+        // Define the expected output with account details and transactions
         String expectedOutput =
-                "Date                | Type       | Amount   | Balance\n" +
+                "Account Owner: John Doe\n" +
+                        "Currency: USD\n" +
+                        "Created At: " + account.getCreatedAt() + "\n\n" +
+                        "Date                | Type       | Amount   | Balance\n" +
                         "-----------------------------------------------------\n" +
                         "2025-01-09T10:30    | DEPOSIT    | 100.00   | 100.00  \n" +
                         "2025-01-09T10:35    | WITHDRAWAL | 50.00    | 50.00   \n";
 
         // Act: Call the formatter method
-        String formattedOutput = formatter.format(transactions);
+        String formattedOutput = formatter.format(account);
 
         // Assert: Verify that the actual output matches the expected output
         assertEquals(expectedOutput, formattedOutput);
     }
 
     /**
-     * Verifies that the formatter handles an empty list of transactions correctly.
+     * Verifies that the formatter handles an account with no transactions correctly.
      *
      * <p>Scenario:
-     * - Given: An empty list of transactions.
+     * - Given: An account with no transactions.
      * - When: The format method is called.
-     * - Then: The returned string includes only the headers and no transaction data.
+     * - Then: The returned string includes account details and a message indicating
+     *         no transactions are available.
      */
     @Test
-    void shouldFormatEmptyTransactionList() {
-        // Arrange: Set up the formatter and prepare an empty list of transactions
+    void shouldFormatAccountWithNoTransactions() {
+        // Arrange: Create an account with no transactions
+        Account account = new Account("John Doe", "USD");
         TransactionFormatterService formatter = new TransactionFormatterServiceImpl();
-        List<Transaction> transactions = List.of();
 
-        // Define the expected output: Only the header row is included
+        // Define the expected output: Account details with no transactions message
         String expectedOutput =
-                "Date                | Type       | Amount   | Balance\n" +
-                        "-----------------------------------------------------\n";
+                "Account Owner: John Doe\n" +
+                        "Currency: USD\n" +
+                        "Created At: " + account.getCreatedAt() + "\n\n" +
+                        "Date                | Type       | Amount   | Balance\n" +
+                        "-----------------------------------------------------\n" +
+                        "No transactions available for this account.\n";
 
-        // Act: Call the format method with the empty list
-        String formattedOutput = formatter.format(transactions);
+        // Act: Call the formatter method
+        String formattedOutput = formatter.format(account);
 
-        // Assert: Verify that the output matches the expected table format
+        // Assert: Verify that the output matches the expected format
         assertEquals(expectedOutput, formattedOutput);
     }
 }
-

@@ -36,7 +36,7 @@ public class TransactionServiceTest {
         // Arrange: Mock AccountService and create a real TransactionService
         AccountService accountService = mock(AccountService.class);
         TransactionService transactionService = new TransactionServiceImpl();
-        Account account = new Account();
+        Account account = new Account("Joe","EUR");
 
         // Mock deposit behavior: directly add a transaction to the account
         doAnswer(invocation -> {
@@ -70,7 +70,7 @@ public class TransactionServiceTest {
     void shouldRecordDepositTransaction() {
         // Arrange
         TransactionService transactionService = new TransactionServiceImpl();
-        Account account = new Account();
+        Account account = new Account("Joe","EUR");
         account.setBalance(100.0);
         double depositAmount = 100.0;
 
@@ -99,7 +99,7 @@ public class TransactionServiceTest {
     void shouldRecordWithdrawalTransaction() {
         // Arrange
         TransactionService transactionService = new TransactionServiceImpl();
-        Account account = new Account();
+        Account account = new Account("Joe","EUR");
         account.setBalance(150.0);
         double withdrawalAmount = 50.0;
 
@@ -128,7 +128,7 @@ public class TransactionServiceTest {
     void shouldRetrieveTransactionHistoryWithMockedTransactions() {
         // Arrange
         TransactionService transactionServiceMock = mock(TransactionService.class);
-        Account account = new Account();
+        Account account = new Account("Joe","EUR");
 
         List<Transaction> mockedTransactions = List.of(
                 new Transaction(TransactionType.DEPOSIT, 100.0, 100.0),
@@ -176,7 +176,7 @@ public class TransactionServiceTest {
         assertEquals("Account cannot be null.", nullAccountException.getMessage());
 
         // Act & Assert: Invalid transaction type
-        Account account = new Account();
+        Account account = new Account("Joe","EUR");
         Exception nullTypeException = assertThrows(IllegalArgumentException.class, () ->
                 transactionService.recordTransaction(account, null, 100.0));
         assertEquals("Transaction type cannot be null.", nullTypeException.getMessage());
