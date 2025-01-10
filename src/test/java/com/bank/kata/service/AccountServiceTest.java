@@ -60,7 +60,7 @@ public class AccountServiceTest {
     @Test
     void shouldIncreaseBalanceWhenDepositIsMade() {
         // Arrange: Create an account with an initial balance
-        Account account = new Account();
+        Account account = new Account("Joe","EUR");
 
         // Act: Withdraw an amount from the account
         accountService.deposit(account, 100.0);
@@ -81,7 +81,7 @@ public class AccountServiceTest {
     @Test
     void shouldThrowExceptionWhenDepositIsNegative() {
         // Arrange: Create an empty account
-        Account account = new Account();
+        Account account = new Account("Joe","EUR");
 
         // Act: Attempt a negative deposit (-100.0) and capture the exception
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -105,7 +105,7 @@ public class AccountServiceTest {
     @Test
     void shouldThrowExceptionWhenDepositIsZero() {
         // Arrange: an empty Account
-        Account account = new Account();
+        Account account = new Account("Joe","EUR");
 
         // Act: Attempt a zero deposit (0.0) and capture the exception
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -127,7 +127,7 @@ public class AccountServiceTest {
     @Test
     void shouldDecreaseBalanceWhenWithdrawalIsMade() {
         // Arrange: Create an account with an initial balance
-        Account account = new Account();
+        Account account = new Account("Joe","EUR");
         account.setBalance(200.0); // Directly set the initial balance
 
         // Act: Withdraw an amount
@@ -150,7 +150,7 @@ public class AccountServiceTest {
     @Test
     void shouldThrowExceptionWhenWithdrawalExceedsBalance() {
         // Arrange: Create an account with a balance of 100.0
-        Account account = new Account();
+        Account account = new Account("Joe","EUR");
         account.setBalance(100.0); // Deposit initial balance
 
         // Act & Assert: Attempt to withdraw more than the balance and verify the exception
@@ -175,7 +175,7 @@ public class AccountServiceTest {
     @Test
     void shouldThrowExceptionWhenWithdrawalIsNegative() {
         // Arrange: Create an account with default balance
-        Account account = new Account();
+        Account account = new Account("Joe","EUR");
 
         // Act & Assert: Attempt to withdraw a negative amount and verify the exception
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {

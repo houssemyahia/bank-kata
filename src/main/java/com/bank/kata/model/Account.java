@@ -1,7 +1,9 @@
 package com.bank.kata.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Represents a bank account with a balance.
@@ -17,6 +19,27 @@ import java.util.List;
  * @version 1.0
  */
 public class Account {
+
+    /**
+     * Unique identifier for the account.
+     */
+    private final String accountId;
+
+    /**
+     * Name of the account holder.
+     */
+    private final String ownerName;
+
+    /**
+     * Currency of the account (e.g., USD, EUR).
+     */
+    private final String currency;
+
+    /**
+     * Date when the account was created.
+     */
+    private final LocalDateTime createdAt;
+
     /**
      * Represents the current balance of the account.
      */
@@ -27,11 +50,54 @@ public class Account {
     private List<Transaction> transactions;
 
     /**
-     * Initializes a new account with a balance of 0.0.
+     * Initializes a new account
+     *
+     * @param ownerName the name of the account holder.
+     * @param currency  the currency for the account (e.g., "USD").
      */
-    public Account() {
+    public Account(String ownerName, String currency) {
+        this.accountId = UUID.randomUUID().toString();
+        this.ownerName = ownerName;
+        this.currency = currency;
+        this.createdAt = LocalDateTime.now();
         this.balance = 0.0;
         this.transactions = new ArrayList<>();
+    }
+
+    /**
+     * Returns the unique identifier of the account.
+     *
+     * @return the unique account identifier as a {@code String}.
+     */
+    public String getAccountId() {
+        return accountId;
+    }
+
+    /**
+     * Returns the name of the account holder.
+     *
+     * @return the name of the account owner as a {@code String}.
+     */
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    /**
+     * Returns the currency of the account.
+     *
+     * @return the currency of the account as a {@code String}.
+     */
+    public String getCurrency() {
+        return currency;
+    }
+
+    /**
+     * Returns the date and time when the account was created.
+     *
+     * @return the creation timestamp of the account as a {@code LocalDateTime}.
+     */
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     /**
