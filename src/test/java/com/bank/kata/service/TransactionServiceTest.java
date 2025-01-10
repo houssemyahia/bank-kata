@@ -1,7 +1,11 @@
 package com.bank.kata.service;
 
 import com.bank.kata.model.Account;
+import com.bank.kata.model.Transaction;
+import com.bank.kata.model.TransactionType;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -38,7 +42,7 @@ public class TransactionServiceTest {
 
         // Mock deposit behavior: directly add a transaction to the account
         doAnswer(invocation -> {
-            account.getTransactions().add(new Transaction(TransactionType.DEPOSIT, 100.0, 100.0)); // Type 1 = DEPOSIT
+            account.getTransactions().add(new Transaction(TransactionType.DEPOSIT, 100.0, 100.0));
             account.setBalance(100.0);
             return null;
         }).when(accountService).deposit(account, 100.0);
@@ -50,7 +54,7 @@ public class TransactionServiceTest {
         // Assert: Verify transaction history
         assertEquals(1, history.size());
         Transaction transaction = history.get(0);
-        assertEquals(TransactionType.DEPOSIT, transaction.getType()); //
+        assertEquals(TransactionType.DEPOSIT, transaction.getType());
         assertEquals(100.0, transaction.getAmount());
         assertEquals(100.0, transaction.getBalanceAfterTransaction());
         assertNotNull(transaction.getDate());

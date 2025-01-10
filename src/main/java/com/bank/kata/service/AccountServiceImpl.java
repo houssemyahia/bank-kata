@@ -1,6 +1,7 @@
 package com.bank.kata.service;
 
 import com.bank.kata.model.Account;
+import com.bank.kata.model.TransactionType;
 
 /**
  * Implementation of the AccountService interface.
@@ -13,6 +14,24 @@ import com.bank.kata.model.Account;
  * @version 1.0
  */
 public class AccountServiceImpl implements AccountService {
+    /**
+     * Service responsible for managing transactions associated with accounts.
+     */
+    private final TransactionService transactionService;
+
+    /**
+     * Constructs an AccountServiceImpl with the specified TransactionService.
+     *
+     * @param transactionService the service used to manage transactions.
+     * @throws IllegalArgumentException if the transactionService is null.
+     */
+    public AccountServiceImpl(TransactionService transactionService) {
+        if (transactionService == null) {
+            throw new IllegalArgumentException("TransactionService cannot be null.");
+        }
+        this.transactionService = transactionService;
+    }
+
     /**
      * Deposits a specified amount into the given account.
      *
@@ -32,6 +51,9 @@ public class AccountServiceImpl implements AccountService {
         }
         // Update the account balance
         account.setBalance(account.getBalance() + amount);
+
+        // Record the transaction
+        transactionService.recordTransaction(account, TransactionType.DEPOSIT, amount);
     }
 
     /**
@@ -58,5 +80,8 @@ public class AccountServiceImpl implements AccountService {
         }
         // Deduct the withdrawal amount from the account balance
         account.setBalance(account.getBalance() - amount);
+
+        // Record the transaction
+        transactionService.recordTransaction(account, TransactionType.DEPOSIT, amount);
     }
 }

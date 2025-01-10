@@ -1,10 +1,12 @@
 package com.bank.kata.service;
 
 import com.bank.kata.model.Account;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 /**
  * Test suite for the AccountService interface and its implementation.
@@ -19,6 +21,35 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class AccountServiceTest {
 
     /**
+     * Mocked instance of TransactionService used to isolate its behavior
+     * during tests.
+     */
+    private TransactionService transactionServiceMock;
+
+    /**
+     * Instance of AccountService under test, initialized with the mocked
+     * TransactionService.
+     */
+    private AccountService accountService;
+
+    /**
+     * Initializes the test environment before each test.
+     *
+     * <p>This method is executed before each test to set up the required dependencies
+     * for the test cases. It creates a mocked instance of {@link TransactionService}
+     * using Mockito and injects it into the {@link AccountServiceImpl} to isolate
+     * the behavior of the account service during testing.
+     */
+    @BeforeEach
+    void setUp() {
+        // Mock the TransactionService dependency
+        transactionServiceMock = mock(TransactionService.class);
+
+        // Inject the mock into AccountServiceImpl
+        accountService = new AccountServiceImpl(transactionServiceMock);
+    }
+
+    /**
      * Validates that a deposit correctly updates the account balance.
      *
      * <p>Scenario:
@@ -28,14 +59,13 @@ public class AccountServiceTest {
      */
     @Test
     void shouldIncreaseBalanceWhenDepositIsMade() {
-        // Arrange
-        AccountService accountService = new AccountServiceImpl();
+        // Arrange: Create an account with an initial balance
         Account account = new Account();
 
-        // Act
+        // Act: Withdraw an amount from the account
         accountService.deposit(account, 100.0);
 
-        // Assert
+        // Assert: Verify that the balance is updated correctly after the withdrawal
         assertEquals(100.0, account.getBalance());
     }
 
@@ -43,23 +73,22 @@ public class AccountServiceTest {
      * Tests the behavior of the deposit method when a negative amount is provided.
      *
      * <p>Scenario:
-     * - Given: An instance of AccountService and an empty Account.
+     * - Given: an empty Account.
      * - When: A negative deposit (-100.0) is attempted.
      * - Then: An IllegalArgumentException is thrown with the message:
      * "Deposit amount must be positive."
      */
     @Test
     void shouldThrowExceptionWhenDepositIsNegative() {
-        // Given: An instance of AccountService and an empty Account
-        AccountService accountService = new AccountServiceImpl();
+        // Arrange: Create an empty account
         Account account = new Account();
 
-        // When: A negative deposit (-100.0) is attempted
+        // Act: Attempt a negative deposit (-100.0) and capture the exception
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             accountService.deposit(account, -100.0);
         });
 
-        // Then: An IllegalArgumentException is thrown with the expected message
+        // Assert: Verify the exception message is as expected
         assertEquals("Deposit amount must be positive.", exception.getMessage());
     }
 
@@ -68,23 +97,22 @@ public class AccountServiceTest {
      * Tests the behavior of the deposit method when a zero amount is provided.
      *
      * <p>Scenario:
-     * - Given: An instance of AccountService and an empty Account.
+     * - Given: an empty Account.
      * - When: A zero deposit (0.0) is attempted.
      * - Then: An IllegalArgumentException is thrown with the message:
      * "Deposit amount must be positive."
      */
     @Test
     void shouldThrowExceptionWhenDepositIsZero() {
-        // Given: An instance of AccountService and an empty Account
-        AccountService accountService = new AccountServiceImpl();
+        // Arrange: an empty Account
         Account account = new Account();
 
-        // When: A zero deposit (0.0) is attempted
+        // Act: Attempt a zero deposit (0.0) and capture the exception
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             accountService.deposit(account, 0.0);
         });
 
-        // Then: An IllegalArgumentException is thrown with the expected message
+        // Assert: Verify the exception message
         assertEquals("Deposit amount must be positive.", exception.getMessage());
     }
 
@@ -101,8 +129,6 @@ public class AccountServiceTest {
         // Arrange: Create an account with an initial balance
         Account account = new Account();
         account.setBalance(200.0); // Directly set the initial balance
-
-        AccountService accountService = new AccountServiceImpl();
 
         // Act: Withdraw an amount
         accountService.withdraw(account, 50.0);
@@ -123,8 +149,7 @@ public class AccountServiceTest {
      */
     @Test
     void shouldThrowExceptionWhenWithdrawalExceedsBalance() {
-        // Arrange: Create an AccountService and an account with a balance of 100.0
-        AccountService accountService = new AccountServiceImpl();
+        // Arrange: Create an account with a balance of 100.0
         Account account = new Account();
         accountService.deposit(account, 100.0); // Deposit initial balance
 
@@ -149,8 +174,7 @@ public class AccountServiceTest {
      */
     @Test
     void shouldThrowExceptionWhenWithdrawalIsNegative() {
-        // Arrange: Create an AccountService and an account with default balance
-        AccountService accountService = new AccountServiceImpl();
+        // Arrange: Create an account with default balance
         Account account = new Account();
 
         // Act & Assert: Attempt to withdraw a negative amount and verify the exception
