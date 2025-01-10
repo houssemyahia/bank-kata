@@ -41,7 +41,7 @@ public class Transaction {
      * @param balanceAfterTransaction the balance after the transaction is completed.
      */
     public Transaction(TransactionType type, double amount, double balanceAfterTransaction) {
-        this.date = LocalDateTime.now();
+        this.date = Transaction.getCurrentDate();
         this.type = type;
         this.amount = amount;
         this.balanceAfterTransaction = balanceAfterTransaction;
@@ -81,5 +81,9 @@ public class Transaction {
      */
     public double getBalanceAfterTransaction() {
         return balanceAfterTransaction;
+    }
+
+    public static LocalDateTime getCurrentDate() {
+        return LocalDateTime.now();
     }
 }
